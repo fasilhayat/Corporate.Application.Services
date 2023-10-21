@@ -1,4 +1,5 @@
 using Corporate.Application.Services.Infrastructure;
+using Corporate.Application.Services.Model.Geography;
 using Corporate.Application.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,19 +17,10 @@ public class CountryController : ControllerBase
     }
 
     [HttpGet(Name = "GeCountry")]
-    public IEnumerable<WeatherForecast> Get()
+    public IEnumerable<Country> Get()
     {
         var serviceFactory = new ServiceFactory<CountryService>(null, _logger, null);
-
-
+        //var country = serviceFactory.GetResultAsync<Country>().Result;
         return null;
-
-        //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //{
-        //    Date = DateTime.Now.AddDays(index),
-        //    TemperatureC = Random.Shared.Next(-20, 55),
-        //    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //})
-        //.ToArray();
     }
 }

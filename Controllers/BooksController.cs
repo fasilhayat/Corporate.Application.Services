@@ -1,4 +1,6 @@
+using System.Collections;
 using Corporate.Application.Services.Infrastructure;
+using Corporate.Application.Services.Model.Litterature;
 using Corporate.Application.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,19 +18,15 @@ public class BooksController : ControllerBase
     }
 
     [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    public IEnumerable<Library> Get()
     {
-        var serviceFactory = new ServiceFactory<BooksService>(null, _logger, null);
-
-
+        var serviceFactory = new ServiceFactory<BooksService>(new HttpClient(), _logger, null);
+        var parameters = new List<KeyValuePair<string, string>>
+        {
+            new("bibkeys", "ISBN:9781492092391"),
+            new("format","json")
+        };
+        var result = serviceFactory.GetResultAsync<Book>(parameters).Result;
         return null;
-
-        //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //{
-        //    Date = DateTime.Now.AddDays(index),
-        //    TemperatureC = Random.Shared.Next(-20, 55),
-        //    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //})
-        //.ToArray();
     }
 }

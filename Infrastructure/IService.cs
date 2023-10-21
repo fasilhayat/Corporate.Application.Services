@@ -2,6 +2,6 @@
 {
     public interface IService
     {
-        string BaseAddress { get; init; }
+        string? BaseAddress { get; init; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Corporate.Application.Services.Infrastructure
 {
-    public interface IServiceFactory
+    public interface IServiceFactory : IDisposable
     {
 
     }
