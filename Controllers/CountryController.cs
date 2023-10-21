@@ -10,17 +10,20 @@ namespace Corporate.Application.Services.Controllers;
 public class CountryController : ControllerBase
 {
     private readonly ILogger<CountryService> _logger;
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public CountryController(ILogger<CountryService> logger)
+    public CountryController(IHttpClientFactory httpClientFactory, ILogger<CountryService> logger)
     {
+        _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
 
     [HttpGet(Name = "GeCountry")]
-    public IEnumerable<Country> Get()
+    public Country Get()
     {
-        var serviceFactory = new ServiceFactory<CountryService>(null, _logger, null);
-        //var country = serviceFactory.GetResultAsync<Country>().Result;
+        var serviceFactory = new ServiceFactory<CountryService>(_httpClientFactory, _logger);
+
+        var result = serviceFactory.Execute<List<Country>>().Result;
         return null;
     }
 }

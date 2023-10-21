@@ -1,38 +1,42 @@
-﻿using System.Text.Json;
+﻿using Microsoft.Net.Http.Headers;
+using System.Net;
+using System.Text.Json;
 namespace Corporate.Application.Services.Infrastructure;
 
 public sealed class ServiceFactory<TService> : IServiceFactory
 {
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly JsonSerializerOptions _options;
     private readonly ILogger<TService> _logger;
-    private readonly IConfiguration _configuration;
-    private readonly string _baseAddress = "https://openlibrary.org/api/books/?bibkeys=ISBN:9781492092391&format=json";
+    //private readonly IConfiguration _configuration;
+    //private readonly string _baseAddress = "https://openlibrary.org/api/books/?bibkeys=ISBN:9781492092391&format=json";
+    private readonly string _baseAddress = "https://restcountries.com/v3.1/capital/copenhagen";
 
-    public ServiceFactory(HttpClient httpClient, ILogger<TService> logger, IConfiguration configuration) => (_httpClient, _logger, _configuration) = (httpClient, logger, configuration);
+    //public ServiceFactory(IHttpClientFactory httpClientFactory, ILogger<TService> logger) => (_httpClientFactory, _logger) = (httpClientFactory, logger);
 
-    public async Task<TResult> GetResultAsync<TResult>(IEnumerable<KeyValuePair<string, string>> parameters) where TResult : class, new()
+
+    public ServiceFactory(IHttpClientFactory httpClientFactory, ILogger<TService> logger)
     {
-        //var restUrl = parameters.Select(kvp => $@"{kvp.Key}={kvp.Value}");
-        //var fullUrl = $"{_baseAddress}?{ restUrl}";
-        var fullUrl = $"{_baseAddress}";
-        //var config = _configuration.GetSection(typeof(TService).Name);
-
-        try
-        {
-            // Make HTTP GET request
-            // Parse JSON response deserialize into Todo type
-            var result = await _httpClient.GetFromJsonAsync<JsonContent>(fullUrl, new JsonSerializerOptions(JsonSerializerDefaults.Web));
-            var a = result?.ToString();
-            
-            //return result ?? new TResult();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error getting something fun to say: {Error}", ex);
-        }
-
-        return new TResult();
+        _httpClientFactory = httpClientFactory;
+        _logger = logger;
+        _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
 
-    public void Dispose() => _httpClient.Dispose();
+    private async Task<TResult?> GetDataWithHttpClientFactory<TResult>() where TResult : class, new()
+    {
+        var httpClient = _httpClientFactory.CreateClient();
+        using (var response = await httpClient.GetAsync(_baseAddress, HttpCompletionOption.ResponseHeadersRead))
+        {
+            response.EnsureSuccessStatusCode();
+            var stream = await response.Content.ReadAsStreamAsync();
+            // TODO: fix JsonDocument to custom object type
+            var result = await JsonSerializer.DeserializeAsync<JsonDocument>(stream, _options);
+            return null;
+        }
+    }
+
+    public async Task<TResult?> Execute<TResult>() where TResult : class, new()
+    {
+        return await GetDataWithHttpClientFactory<TResult>();
+    }
 }

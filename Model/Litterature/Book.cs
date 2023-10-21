@@ -2,5 +2,5 @@
 
 public class Book
 {
-    public string? Title { get; init; }
+    public string BookInformation { get; set; }
 }
