@@ -24,8 +24,6 @@ public class BookService : IBookService
         };
 
         var parameters = $"?{string.Join("&", kvp.Select(x => $"{x.Key}={x.Value}"))}";
-
-        var book = _serviceFactory.Execute<Book>(parameters).Result;
-        return book;
+        return _serviceFactory.ExecuteGet<Book>(parameters).Result;
     }
 }

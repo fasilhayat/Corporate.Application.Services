@@ -18,7 +18,7 @@ public class CountryService : ICountryService
     public Country? GetCountry(string cityName)
     {
         var parameters = $"capital/{cityName}";
-        var country = _serviceFactory.Execute<Country>(parameters).Result;
+        var country = _serviceFactory.ExecuteGet<Country>(parameters).Result;
 
         return country;
     }
