@@ -2,9 +2,6 @@
 {
     public interface IServiceFactory<TService>
     {
-        Task<TResult?> Execute<TResult>() where TResult : class, new();
-
-        //Task<TResult> GetResultAsync<TResult>(IEnumerable<KeyValuePair<string, string>> parameters)
-        //    where TResult : class, new();
+        Task<TResult?> Execute<TResult>(string parameters) where TResult : class, new();
     }
 }

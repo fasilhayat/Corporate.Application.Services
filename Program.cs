@@ -1,5 +1,6 @@
 using Corporate.Application.Services.Infrastructure;
 using Corporate.Application.Services.Services;
+using Corporate.Application.Services.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,22 +11,26 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Added for httpClientFactory
-builder.Services.AddHttpClient("BooksServiceClient", config =>
+// Added for named httpClientFactory for books service
+builder.Services.AddHttpClient("BookServiceClient", httpClient =>
 {
-    config.BaseAddress = new Uri("https://openlibrary.org/api/books/");
-    config.Timeout = new TimeSpan(0, 0, 30);
-    config.DefaultRequestHeaders.Clear();
+    httpClient.BaseAddress = new Uri("https://openlibrary.org/api/books/");
+    httpClient.Timeout = new TimeSpan(0, 0, 30);
+    httpClient.DefaultRequestHeaders.Clear();
 });
 
-builder.Services.AddHttpClient("CountryServiceClient", config =>
+// Added for named httpClientFactory for country service
+builder.Services.AddHttpClient("CountryServiceClient", httpClient =>
 {
-    config.BaseAddress = new Uri("https://restcountries.com/v3.1/");
-    config.Timeout = new TimeSpan(0, 0, 30);
-    config.DefaultRequestHeaders.Clear();
+    httpClient.BaseAddress = new Uri("https://restcountries.com/v3.1/");
+    httpClient.Timeout = new TimeSpan(0, 0, 30);
+    httpClient.DefaultRequestHeaders.Clear();
 });
 
-builder.Services.AddScoped<IServiceFactory<BooksService>, ServiceFactory<BooksService>>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<ICountryService, CountryService>();
+
+builder.Services.AddScoped<IServiceFactory<BookService>, ServiceFactory<BookService>>();
 builder.Services.AddScoped<IServiceFactory<CountryService>, ServiceFactory<CountryService>>();
 
 var app = builder.Build();

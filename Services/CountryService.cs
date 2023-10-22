@@ -1,8 +1,10 @@
 ﻿using Corporate.Application.Services.Infrastructure;
+using Corporate.Application.Services.Model.Geography;
+using Corporate.Application.Services.Services.Interfaces;
 
 namespace Corporate.Application.Services.Services;
 
-public class CountryService
+public class CountryService : ICountryService
 {
     private readonly IServiceFactory<CountryService> _serviceFactory;
     private readonly ILogger<CountryService> _logger;
@@ -11,5 +13,13 @@ public class CountryService
     {
         _serviceFactory = serviceFactory;
         _logger = logger;
+    }
+
+    public Country? GetCountry(string cityName)
+    {
+        var parameters = $"capital/{cityName}";
+        var country = _serviceFactory.Execute<Country>(parameters).Result;
+
+        return country;
     }
 }
