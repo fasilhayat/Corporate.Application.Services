@@ -9,25 +9,24 @@ namespace Corporate.Application.Services.Controllers;
 [Route("[controller]")]
 public class BooksController : ControllerBase
 {
+    private readonly IServiceFactory<CountryService> _serviceFactory;
     private readonly ILogger<BooksService> _logger;
-    private readonly IHttpClientFactory _httpClientFactory;
-
-    public BooksController(IHttpClientFactory httpClientFactory, ILogger<BooksService> logger)
+    
+    public BooksController(IServiceFactory<CountryService> serviceFactory, ILogger<BooksService> logger)
     {
+        _serviceFactory = serviceFactory;
         _logger = logger;
-        _httpClientFactory = httpClientFactory;
     }
 
     [HttpGet(Name = "GetBook")]
     public Library Get()
     {
-        var serviceFactory = new ServiceFactory<BooksService>(_httpClientFactory, _logger);
         var parameters = new List<KeyValuePair<string, string>>
         {
             new("bibkeys", "ISBN:9781492092391"),
             new("format","json")
         };
-        var result = serviceFactory.Execute<Book>().Result;
+        var result = _serviceFactory.Execute<Book>().Result;
         return new Library
         {
             Date = DateTime.Now,

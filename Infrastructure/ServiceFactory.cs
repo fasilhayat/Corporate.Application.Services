@@ -1,19 +1,18 @@
-﻿using Microsoft.Net.Http.Headers;
-using System.Net;
-using System.Text.Json;
+﻿using System.Text.Json;
 namespace Corporate.Application.Services.Infrastructure;
 
-public sealed class ServiceFactory<TService> : IServiceFactory
+public sealed class ServiceFactory<TService> : IServiceFactory<TService>
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly JsonSerializerOptions _options;
     private readonly ILogger<TService> _logger;
-    //private readonly IConfiguration _configuration;
     //private readonly string _baseAddress = "https://openlibrary.org/api/books/?bibkeys=ISBN:9781492092391&format=json";
     private readonly string _baseAddress = "https://restcountries.com/v3.1/capital/copenhagen";
 
-    //public ServiceFactory(IHttpClientFactory httpClientFactory, ILogger<TService> logger) => (_httpClientFactory, _logger) = (httpClientFactory, logger);
-
+    public async Task<TResult?> Execute<TResult>() where TResult : class, new()
+    {
+        return await GetDataWithHttpClientFactory<TResult>();
+    }
 
     public ServiceFactory(IHttpClientFactory httpClientFactory, ILogger<TService> logger)
     {
@@ -29,14 +28,10 @@ public sealed class ServiceFactory<TService> : IServiceFactory
         {
             response.EnsureSuccessStatusCode();
             var stream = await response.Content.ReadAsStreamAsync();
+
             // TODO: fix JsonDocument to custom object type
             var result = await JsonSerializer.DeserializeAsync<JsonDocument>(stream, _options);
             return null;
         }
-    }
-
-    public async Task<TResult?> Execute<TResult>() where TResult : class, new()
-    {
-        return await GetDataWithHttpClientFactory<TResult>();
     }
 }

@@ -25,8 +25,8 @@ builder.Services.AddHttpClient("CountryServiceClient", config =>
     config.DefaultRequestHeaders.Clear();
 });
 
-builder.Services.AddScoped<IServiceFactory, ServiceFactory<BooksService>>();
-builder.Services.AddScoped<IServiceFactory, ServiceFactory<CountryService>>();
+builder.Services.AddScoped<IServiceFactory<BooksService>, ServiceFactory<BooksService>>();
+builder.Services.AddScoped<IServiceFactory<CountryService>, ServiceFactory<CountryService>>();
 
 var app = builder.Build();
 
