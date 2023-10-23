@@ -11,9 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Added for named httpClientFactory for books service
-builder.Services.AddHttpClient("BookServiceClient", httpClient =>
+builder.Services.AddHttpClient("UserServiceClient", httpClient =>
 {
-    httpClient.BaseAddress = new Uri("https://openlibrary.org/api/books/");
+    httpClient.BaseAddress = new Uri("https://random-data-api.com/api/v2/users");
     httpClient.Timeout = new TimeSpan(0, 0, 30);
     httpClient.DefaultRequestHeaders.Clear();
 });
@@ -21,16 +21,26 @@ builder.Services.AddHttpClient("BookServiceClient", httpClient =>
 // Added for named httpClientFactory for country service
 builder.Services.AddHttpClient("CountryServiceClient", httpClient =>
 {
-    httpClient.BaseAddress = new Uri("https://restcountries.com/v3.1/");
+    httpClient.BaseAddress = new Uri("https://restcountries.com/v3.1");
     httpClient.Timeout = new TimeSpan(0, 0, 30);
     httpClient.DefaultRequestHeaders.Clear();
 });
 
-builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddScoped<ICountryService, CountryService>();
+// Added for named httpClientFactory for country service
+builder.Services.AddHttpClient("CreditcardServiceClient", httpClient =>
+{
+    httpClient.BaseAddress = new Uri("https://random-data-api.com/api/v2");
+    httpClient.Timeout = new TimeSpan(0, 0, 30);
+    httpClient.DefaultRequestHeaders.Clear();
+});
 
-builder.Services.AddScoped<IServiceFactory<BookService>, ServiceFactory<BookService>>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICountryService, CountryService>();
+builder.Services.AddScoped<ICreditcardService, CreditcardService>();
+
+builder.Services.AddScoped<IServiceFactory<UserService>, ServiceFactory<UserService>>();
 builder.Services.AddScoped<IServiceFactory<CountryService>, ServiceFactory<CountryService>>();
+builder.Services.AddScoped<IServiceFactory<CreditcardService>, ServiceFactory<CreditcardService>>();
 
 var app = builder.Build();
 
