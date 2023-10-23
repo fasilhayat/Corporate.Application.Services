@@ -9,10 +9,12 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService>
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<TService> _logger;
     private readonly JsonSerializerOptions _options;
+    private readonly IConfiguration _configuration;
 
-    public ServiceFactory(IHttpClientFactory httpClientFactory, ILogger<TService> logger)
+    public ServiceFactory(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<TService> logger)
     {
         _httpClientFactory = httpClientFactory;
+        _configuration = configuration;
         _logger = logger;
         _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
@@ -59,5 +61,10 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService>
 
         var result = await JsonSerializer.DeserializeAsync<TResult>(stream, _options);
         return result;
+    }
+
+    private void ReadConfiguration()
+    {
+        var settings = _configuration.GetSection(typeof(TService).Name);
     }
 }
