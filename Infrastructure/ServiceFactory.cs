@@ -21,6 +21,7 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService>
 
     public async Task<TResult?> Execute<TResult>(IEnumerable<KeyValuePair<string, string>> parameters) where TResult : class, new()
     {
+        //TODO: Read configuration
         var settings = _configuration.GetSection($"{typeof(TService).Name}Config");
         var querystring = $"/?{string.Join("&", parameters.Select(x => $"{x.Key}={x.Value}"))}";
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
@@ -29,6 +30,7 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService>
 
     public async Task<TResult?> Execute<TResult>(string querystring) where TResult : class, new()
     {
+        //TODO: Read configuration
         var settings = _configuration.GetSection($"{typeof(TService).Name}Config");
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
         return await GetData<TResult>(httpClient, querystring);
