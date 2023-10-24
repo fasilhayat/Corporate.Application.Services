@@ -6,10 +6,9 @@ public class Creditcard
 
     public string? Uid { get; set; }
 
-    public string? CreditcardNumber { get; set; }
+    public string? Credit_Card_Number { get; set; }
 
-    public DateTime CreditcardExpiryDate { get; set; }
+    public DateTime Credit_Card_ExpiryDate { get; set; }
 
-    public string? CreditcardType { get; set; }
+    public string? Credit_Card_Type { get; set; }
 }
-
