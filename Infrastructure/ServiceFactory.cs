@@ -119,15 +119,15 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     {
         var configSections = new List<Func<IConfigurationSection?, IConfigurationSection?>>
         {
-            ApiKeyConfiguration,
-            JwtConfiguration
-            
+            JwtConfiguration,
+            ApiKeyConfiguration
         };
 
-        var section = _configuration.GetSection($"{typeof(TConfig).Name}");
-        var configSection = configSections.Select(x => x.Invoke(section));
-        return configSection.FirstOrDefault();
+        var rootSection = _configuration.GetSection($"{typeof(TConfig).Name}");
+        var configSectionMatched = configSections.Select(x => x.Invoke(rootSection)).ToList();
+        var section = configSectionMatched.SingleOrDefault(x => x != null);
 
+        return section;
     }
 
     /// <summary>
