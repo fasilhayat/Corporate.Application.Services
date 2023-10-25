@@ -2,7 +2,7 @@
 
 public class ApikeyConfig
 {
-    public string? Key { get; set; }
+    public string? Key { get; init; }
 
-    public bool EnableEncryption { get; set; }
+    public bool EnableEncryption { get; init; }
 }

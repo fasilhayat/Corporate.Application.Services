@@ -1,16 +1,30 @@
 ﻿using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Corporate.Application.Services.Config;
 
 namespace Corporate.Application.Services.Infrastructure;
 
-public sealed class ServiceFactory<TService> : IServiceFactory<TService>
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="TService"></typeparam>
+/// <typeparam name="TServiceConfig"></typeparam>
+public sealed class ServiceFactory<TService, TServiceConfig> : IServiceFactory<TService> 
+    where TService : class 
+    where TServiceConfig : class
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<TService> _logger;
     private readonly IConfiguration _configuration;
     private readonly JsonSerializerOptions _options;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="httpClientFactory"></param>
+    /// <param name="configuration"></param>
+    /// <param name="logger"></param>
     public ServiceFactory(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<TService> logger)
     {
         _httpClientFactory = httpClientFactory;
@@ -123,8 +137,8 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService>
     private IConfigurationSection JwtConfiguration()
     {
         //TODO: Read configuration
-        var settings = _configuration.GetSection($"{typeof(TService).Name}Config");
-        var setting = settings.GetSection("JwtConfig").Value;
+        var settings = _configuration.GetSection($"{typeof(TServiceConfig).Name}");
+        var setting = settings.Get<JwtConfig>();
 
         return settings;
     }
@@ -136,8 +150,8 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService>
     private IConfigurationSection ApiKeyConfiguration()
     {
         //TODO: Read configuration
-        var settings = _configuration.GetSection($"{typeof(TService).Name}Config");
-
+        var settings = _configuration.GetSection($"{typeof(TServiceConfig).Name}");
+        var setting = settings.Get<ApikeyConfig>();
         return settings;
     }
 }

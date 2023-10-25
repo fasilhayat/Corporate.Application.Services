@@ -2,21 +2,21 @@
 
 namespace Corporate.Application.Services.Model.Membership;
 
-public class User
+public record User
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
 
-    public string? Uid { get; set; }
+    public string? Uid { get; init; }
 
-    public string? Password { get; set; }
+    public string? Password { get; init; }
 
     [JsonPropertyName("first_name")]
-    public string? Firstname { get; set; }
+    public string? Firstname { get; init; }
 
     [JsonPropertyName("last_name")]
-    public string? Lastname { get; set; }
+    public string? Lastname { get; init; }
 
-    public string? Username { get; set; }
+    public string? Username { get; init; }
 
-    public string? Email { get; set; }
+    public string? Email { get; init; }
 }

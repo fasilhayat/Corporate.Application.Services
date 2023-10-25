@@ -2,11 +2,23 @@
 
 public class JwtConfig
 {
-    public string? PublicKeyPath { get; set; }
+    public string? PublicKeyFilePath { get; init; }
 
-    public string? PrivateKeyPath { get; set; }
+    public string? PrivateKeyFilePath { get; init; }
 
-    public string? EncryptionAlgorithm { get; set; }
+    public string? ExternalIssuer { get; init; }
 
-    public bool EnableEncryption { get; set; }
+    public string? InternalIssuer { get; init; }
+
+    public string? Algorithm { get; init; }
+
+    public string? HashAlgorithm { get; init; }
+
+    public bool ValidateLifetime { get; init; }
+
+    public bool ValidateAudience { get; init; }
+
+    public bool ValidateIssuer { get; init; }
+
+    public bool ValidateIssuerSigningKey { get; init; }
 }

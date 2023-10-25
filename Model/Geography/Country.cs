@@ -1,9 +1,8 @@
-﻿namespace Corporate.Application.Services.Model.Geography
-{
-    public class Country
-    {
-        public string? Name { get; set; }
+﻿namespace Corporate.Application.Services.Model.Geography;
 
-        public string? Official { get; set; }
-    }
+public record Country
+{
+    public string? Name { get; init; }
+
+    public string? Official { get; init; }
 }

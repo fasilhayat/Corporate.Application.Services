@@ -1,14 +1,14 @@
 ﻿namespace Corporate.Application.Services.Model.Finance;
 
-public class Creditcard
+public record Creditcard
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
 
-    public string? Uid { get; set; }
+    public string? Uid { get; init; }
 
-    public string? Credit_Card_Number { get; set; }
+    public string? Credit_Card_Number { get; init; }
 
-    public DateTime Credit_Card_ExpiryDate { get; set; }
+    public DateTime Credit_Card_ExpiryDate { get; init; }
 
-    public string? Credit_Card_Type { get; set; }
+    public string? Credit_Card_Type { get; init; }
 }
