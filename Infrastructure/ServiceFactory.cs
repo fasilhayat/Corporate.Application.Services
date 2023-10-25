@@ -9,10 +9,8 @@ namespace Corporate.Application.Services.Infrastructure;
 /// 
 /// </summary>
 /// <typeparam name="TService"></typeparam>
-/// <typeparam name="TServiceConfig"></typeparam>
-public sealed class ServiceFactory<TService, TServiceConfig> : IServiceFactory<TService> 
-    where TService : class 
-    where TServiceConfig : class
+/// <typeparam name="TConfig"></typeparam>
+public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService> where TConfig : class
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<TService> _logger;
@@ -117,16 +115,18 @@ public sealed class ServiceFactory<TService, TServiceConfig> : IServiceFactory<T
     /// 
     /// </summary>
     /// <returns></returns>
-    public IConfigurationSection ExtractServiceConfiguration()
+    public IConfigurationSection? ExtractServiceConfiguration()
     {
-        var configSections = new List<Func<IConfigurationSection>>
+        var configSections = new List<Func<IConfigurationSection?, IConfigurationSection?>>
         {
-            JwtConfiguration,
-            ApiKeyConfiguration
+            ApiKeyConfiguration,
+            JwtConfiguration
+            
         };
 
-        var configSection = configSections.Select(x => x.Invoke());
-        return configSection.FirstOrDefault()!;
+        var section = _configuration.GetSection($"{typeof(TConfig).Name}");
+        var configSection = configSections.Select(x => x.Invoke(section));
+        return configSection.FirstOrDefault();
 
     }
 
@@ -134,24 +134,21 @@ public sealed class ServiceFactory<TService, TServiceConfig> : IServiceFactory<T
     /// 
     /// </summary>
     /// <returns></returns>
-    private IConfigurationSection JwtConfiguration()
+    private IConfigurationSection? JwtConfiguration(IConfigurationSection? section)
     {
-        //TODO: Read configuration
-        var settings = _configuration.GetSection($"{typeof(TServiceConfig).Name}");
-        var setting = settings.Get<JwtConfig>();
-
-        return settings;
+        //TODO: Detect configuration
+        var setting = section?.GetSection(nameof(JwtConfig)).Get<JwtConfig>();
+        return setting != null ? section : null;
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    private IConfigurationSection ApiKeyConfiguration()
+    private IConfigurationSection? ApiKeyConfiguration(IConfigurationSection? section)
     {
-        //TODO: Read configuration
-        var settings = _configuration.GetSection($"{typeof(TServiceConfig).Name}");
-        var setting = settings.Get<ApikeyConfig>();
-        return settings;
+        //TODO: Detect configuration
+        var setting = section?.GetSection(nameof(ApikeyConfig)).Get<ApikeyConfig>();
+        return setting != null ? section : null;
     }
 }
