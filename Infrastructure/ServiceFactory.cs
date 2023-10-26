@@ -42,7 +42,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         var querystring = $"/?{string.Join("&", parameters.Select(x => $"{x.Key}={x.Value}"))}";
 
         //TODO: Read configuration
-        var someting = ExtractServiceConfiguration();
+        var someting = ExtractServiceConfiguration() as JwtConfig;
         
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
         return await GetData<TResult>(httpClient, querystring);
@@ -57,7 +57,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     public async Task<TResult?> Execute<TResult>(string querystring) where TResult : class, new()
     {
         //TODO: Read configuration
-        var someting = ExtractServiceConfiguration();
+        var someting = ExtractServiceConfiguration() as JwtConfig;
 
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
         return await GetData<TResult>(httpClient, querystring);

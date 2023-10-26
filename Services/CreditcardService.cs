@@ -17,7 +17,7 @@ public class CreditcardService : ICreditcardService
 
     public Creditcard? GetCreditcard()
     {
-        string parameters = "/credit_cards";
+        var parameters = "/credit_cards";
         return _serviceFactory.Execute<Creditcard>(parameters).Result;
     }
 }
