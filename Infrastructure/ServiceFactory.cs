@@ -42,7 +42,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         var querystring = $"/?{string.Join("&", parameters.Select(x => $"{x.Key}={x.Value}"))}";
 
         //TODO: Read configuration
-        var someting = ExtractServiceConfiguration() as JwtConfig;
+        var someting = ExtractServiceConfiguration();
         
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
         return await GetData<TResult>(httpClient, querystring);
@@ -57,7 +57,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     public async Task<TResult?> Execute<TResult>(string querystring) where TResult : class, new()
     {
         //TODO: Read configuration
-        var someting = ExtractServiceConfiguration() as JwtConfig;
+        var someting = ExtractServiceConfiguration();
 
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
         return await GetData<TResult>(httpClient, querystring);
@@ -90,6 +90,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         response.EnsureSuccessStatusCode();
         var stream = await response.Content.ReadAsStreamAsync();
         var result = await JsonSerializer.DeserializeAsync<TResult>(stream, _options);
+
         return result;
     }
 
@@ -108,6 +109,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         response.EnsureSuccessStatusCode();
         var stream = await response.Content.ReadAsStreamAsync();
         var result = await JsonSerializer.DeserializeAsync<TResult>(stream, _options);
+
         return result;
     }
 
@@ -117,15 +119,14 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// <returns></returns>
     public IConfigurationSection? ExtractServiceConfiguration()
     {
-        var configSections = new List<Func<IConfigurationSection?, IConfigurationSection?>>
+        var configSections = new List<Func<IConfigurationSection?, IConfigurationSection>>
         {
-            JwtConfiguration,
-            ApiKeyConfiguration
+            JwtConfiguration!,
+            ApiKeyConfiguration!
         };
 
         var rootSection = _configuration.GetSection($"{typeof(TConfig).Name}");
-        var configSectionMatched = configSections.Select(x => x.Invoke(rootSection)).ToList();
-        var section = configSectionMatched.SingleOrDefault(x => x != null);
+        var section = configSections.Select(x => x.Invoke(rootSection)).SingleOrDefault(x => x.Key != null); ;
 
         return section;
     }
@@ -137,8 +138,9 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     private IConfigurationSection? JwtConfiguration(IConfigurationSection? section)
     {
         //TODO: Detect configuration
-        var setting = section?.GetSection(nameof(JwtConfig)).Get<JwtConfig>();
-        return setting != null ? section : null;
+        var setting = (section?.GetSection(nameof(JwtConfig)).GetChildren()!).Any() ? section?.GetSection(nameof(JwtConfig)) : null;
+        //var setting = section?.GetSection(nameof(JwtConfig)).Get<JwtConfig>();
+        return setting;
     }
 
     /// <summary>
@@ -148,7 +150,8 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     private IConfigurationSection? ApiKeyConfiguration(IConfigurationSection? section)
     {
         //TODO: Detect configuration
-        var setting = section?.GetSection(nameof(ApikeyConfig)).Get<ApikeyConfig>();
-        return setting != null ? section : null;
+        var setting = (section?.GetSection(nameof(ApikeyConfig)).GetChildren()!).Any() ? section?.GetSection(nameof(ApikeyConfig)) : null;
+        //var setting = section?.GetSection(nameof(ApikeyConfig)).Get<ApikeyConfig>();
+        return setting;
     }
 }
