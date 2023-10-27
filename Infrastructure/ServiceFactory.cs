@@ -141,10 +141,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// <returns></returns>
     private IConfigurationSection? JwtConfiguration(IConfigurationSection? section)
     {
-        //TODO: Detect configuration
-        var setting = section!.GetSection(nameof(JwtConfig)).GetChildren().Any() ? section.GetSection(nameof(JwtConfig)) : null;
-        //var settingA = section?.GetSection(nameof(JwtConfig)).Get<JwtConfig>();
-        return setting;
+        return DetectConfigurationSection<JwtConfig>(section);
     }
 
     /// <summary>
@@ -153,9 +150,18 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// <returns></returns>
     private IConfigurationSection? ApiKeyConfiguration(IConfigurationSection? section)
     {
-        //TODO: Detect configuration
-        var setting = section!.GetSection(nameof(ApikeyConfig)).GetChildren().Any() ? section.GetSection(nameof(ApikeyConfig)) : null;
-        //var setting = section?.GetSection(nameof(ApikeyConfig)).Get<ApikeyConfig>();
-        return setting;
+        return DetectConfigurationSection<ApikeyConfig>(section);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TConfigurationSectionType"></typeparam>
+    /// <param name="section"></param>
+    /// <returns></returns>
+    private IConfigurationSection? DetectConfigurationSection<TConfigurationSectionType>(IConfiguration? section)
+    {
+        var name = typeof(TConfigurationSectionType).Name;
+        return section!.GetSection(name).GetChildren().Any() ? section.GetSection(name) : null;
     }
 }
