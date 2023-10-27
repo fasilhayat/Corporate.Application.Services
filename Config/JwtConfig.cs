@@ -1,6 +1,8 @@
-﻿namespace Corporate.Application.Services.Config;
+﻿using Corporate.Application.Services.Config.Interfaces;
 
-public class JwtConfig
+namespace Corporate.Application.Services.Config;
+
+public record JwtConfig : IJwtConfig
 {
     public string? PublicKeyFilePath { get; init; }
 

@@ -1,6 +1,8 @@
-﻿namespace Corporate.Application.Services.Config;
+﻿using Corporate.Application.Services.Config.Interfaces;
 
-public class ApikeyConfig
+namespace Corporate.Application.Services.Config;
+
+public class ApikeyConfig : IApikeyConfig
 {
     public string? Key { get; init; }
 
