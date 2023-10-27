@@ -20,9 +20,9 @@ public class CountryController : ControllerBase
     }
 
     [HttpGet(Name = "GeCountry")]
-    public Country Get()
+    public Country? Get()
     {
         var result = _countryService.GetCountry("Copenhagen");
-        return null;
+        return result;
     }
 }

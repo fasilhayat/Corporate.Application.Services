@@ -2,7 +2,5 @@
 
 public record Country
 {
-    public string? Name { get; init; }
-
-    public string? Official { get; init; }
+    public Name? Name { get; init; }
 }

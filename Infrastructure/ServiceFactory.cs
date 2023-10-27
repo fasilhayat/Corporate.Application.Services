@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Corporate.Application.Services.Config;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using Corporate.Application.Services.Config;
 
 namespace Corporate.Application.Services.Infrastructure;
 
@@ -131,8 +130,8 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         };
 
         var rootSection = _configuration.GetSection($"{typeof(TConfig).Name}");
-        var sectionMacthed = configSections.Select(x => x.Invoke(rootSection));
-        var section = sectionMacthed.SingleOrDefault(x => x.Exists());
+        var section = configSections.Select(x => x.Invoke(rootSection)).SingleOrDefault(x => x.Exists());
+        
         return section;
     }
 
@@ -143,7 +142,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     private IConfigurationSection? JwtConfiguration(IConfigurationSection? section)
     {
         //TODO: Detect configuration
-        var setting = (section?.GetSection(nameof(JwtConfig)).GetChildren()!).Any() ? section?.GetSection(nameof(JwtConfig)) : null;
+        var setting = section!.GetSection(nameof(JwtConfig)).GetChildren().Any() ? section.GetSection(nameof(JwtConfig)) : null;
         //var settingA = section?.GetSection(nameof(JwtConfig)).Get<JwtConfig>();
         return setting;
     }
@@ -155,7 +154,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     private IConfigurationSection? ApiKeyConfiguration(IConfigurationSection? section)
     {
         //TODO: Detect configuration
-        var setting = (section?.GetSection(nameof(ApikeyConfig)).GetChildren()!).Any() ? section?.GetSection(nameof(ApikeyConfig)) : null;
+        var setting = section!.GetSection(nameof(ApikeyConfig)).GetChildren().Any() ? section.GetSection(nameof(ApikeyConfig)) : null;
         //var setting = section?.GetSection(nameof(ApikeyConfig)).Get<ApikeyConfig>();
         return setting;
     }
