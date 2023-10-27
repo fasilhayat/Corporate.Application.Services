@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Corporate.Application.Services.Config;
@@ -43,7 +44,8 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
 
         //TODO: Read configuration
         var someting = ExtractServiceConfiguration();
-        
+
+        _logger.LogInformation($"Creating http client: {typeof(TService).Name}Client");
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
         return await GetData<TResult>(httpClient, querystring);
     }
@@ -59,6 +61,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         //TODO: Read configuration
         var someting = ExtractServiceConfiguration();
 
+        _logger.LogInformation($"Creating http client: {typeof(TService).Name}Client");
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
         return await GetData<TResult>(httpClient, querystring);
     }
@@ -71,6 +74,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// <returns></returns>
     public async Task<TResult?> Execute<TResult>(JsonObject json) where TResult : class, new()
     {
+        _logger.LogInformation($"Creating http client: {typeof(TService).Name}Client");
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
         return await PostData<TResult>(httpClient, json);
     }
@@ -85,6 +89,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     private async Task<TResult?> GetData<TResult>(HttpClient client, string parameters) where TResult : class, new()
     {
         var uri = new Uri($"{client.BaseAddress}{parameters}");
+        _logger.LogInformation($"Calling {uri.AbsoluteUri}");
         using var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
         
         response.EnsureSuccessStatusCode();
@@ -126,8 +131,8 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         };
 
         var rootSection = _configuration.GetSection($"{typeof(TConfig).Name}");
-        var section = configSections.Select(x => x.Invoke(rootSection)).SingleOrDefault(x => x.Key != null); ;
-
+        var sectionMacthed = configSections.Select(x => x.Invoke(rootSection));
+        var section = sectionMacthed.SingleOrDefault(x => x.Exists());
         return section;
     }
 
@@ -139,7 +144,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     {
         //TODO: Detect configuration
         var setting = (section?.GetSection(nameof(JwtConfig)).GetChildren()!).Any() ? section?.GetSection(nameof(JwtConfig)) : null;
-        //var setting = section?.GetSection(nameof(JwtConfig)).Get<JwtConfig>();
+        //var settingA = section?.GetSection(nameof(JwtConfig)).Get<JwtConfig>();
         return setting;
     }
 
