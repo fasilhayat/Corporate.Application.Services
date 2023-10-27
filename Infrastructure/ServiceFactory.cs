@@ -44,7 +44,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         //TODO: Read configuration
         var someting = ExtractServiceConfiguration();
 
-        _logger.LogInformation($"Creating http client: {typeof(TService).Name}Client");
+        _logger.LogInformation($"Creating http client: '{typeof(TService).Name}Client'");
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
         return await GetData<TResult>(httpClient, querystring);
     }
@@ -60,7 +60,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         //TODO: Read configuration
         var someting = ExtractServiceConfiguration();
 
-        _logger.LogInformation($"Creating http client: {typeof(TService).Name}Client");
+        _logger.LogInformation($"Creating http client: '{typeof(TService).Name}Client'");
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
         return await GetData<TResult>(httpClient, querystring);
     }
@@ -73,7 +73,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// <returns></returns>
     public async Task<TResult?> Execute<TResult>(JsonObject json) where TResult : class, new()
     {
-        _logger.LogInformation($"Creating http client: {typeof(TService).Name}Client");
+        _logger.LogInformation($"Creating http client: '{typeof(TService).Name}Client'");
         var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
         return await PostData<TResult>(httpClient, json);
     }
@@ -88,7 +88,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     private async Task<TResult?> GetData<TResult>(HttpClient client, string parameters) where TResult : class, new()
     {
         var uri = new Uri($"{client.BaseAddress}{parameters}");
-        _logger.LogInformation($"Calling {uri.AbsoluteUri}");
+        _logger.LogInformation($"Calling '{uri.AbsoluteUri}'");
         using var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
         
         response.EnsureSuccessStatusCode();
