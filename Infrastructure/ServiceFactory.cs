@@ -40,12 +40,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     public async Task<TResult?> Execute<TResult>(IEnumerable<KeyValuePair<string, string>> parameters) where TResult : class, new()
     {
         var querystring = $"/?{string.Join("&", parameters.Select(x => $"{x.Key}={x.Value}"))}";
-
-        //TODO: Read configuration
-        var someting = ExtractServiceConfiguration();
-
-        _logger.LogInformation($"Creating http client: '{typeof(TService).Name}Client'");
-        var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
+        var httpClient = CreateHttpClient();
         return await GetData<TResult>(httpClient, querystring);
     }
 
@@ -57,11 +52,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// <returns></returns>
     public async Task<TResult?> Execute<TResult>(string querystring) where TResult : class, new()
     {
-        //TODO: Read configuration
-        var someting = ExtractServiceConfiguration();
-
-        _logger.LogInformation($"Creating http client: '{typeof(TService).Name}Client'");
-        var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
+        var httpClient = CreateHttpClient();
         return await GetData<TResult>(httpClient, querystring);
     }
 
@@ -73,8 +64,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// <returns></returns>
     public async Task<TResult?> Execute<TResult>(JsonObject json) where TResult : class, new()
     {
-        _logger.LogInformation($"Creating http client: '{typeof(TService).Name}Client'");
-        var httpClient = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
+        var httpClient = CreateHttpClient();
         return await PostData<TResult>(httpClient, json);
     }
 
@@ -121,36 +111,37 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// 
     /// </summary>
     /// <returns></returns>
-    public IConfigurationSection? ExtractServiceConfiguration()
+    public HttpClient CreateHttpClient()
     {
-        var configSections = new List<Func<IConfigurationSection?, IConfigurationSection>>
+        var configSections = new List<Func<IConfigurationSection?, HttpClient>>
         {
-            JwtConfiguration!,
+            ConfigureJwt!,
             ApiKeyConfiguration!
         };
-
-        var rootSection = _configuration.GetSection($"{typeof(TConfig).Name}");
-        var section = configSections.Select(x => x.Invoke(rootSection)).SingleOrDefault(x => x.Exists());
         
-        return section;
+        var rootSection = _configuration.GetSection($"{typeof(TConfig).Name}");
+        var httpClient = configSections.Select(x => x.Invoke(rootSection)).SingleOrDefault(x => x != null);
+        return httpClient ?? _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    private IConfigurationSection? JwtConfiguration(IConfigurationSection? section)
+    private HttpClient? ConfigureJwt(IConfigurationSection? section)
     {
-        return DetectConfigurationSection<JwtConfig>(section);
+        var jwtConfiguration = DetectConfigurationSection<JwtConfig>(section);
+        return jwtConfiguration != null ? _httpClientFactory.CreateClient($"{typeof(TService).Name}Client") : null;
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    private IConfigurationSection? ApiKeyConfiguration(IConfigurationSection? section)
+    private HttpClient? ApiKeyConfiguration(IConfigurationSection? section)
     {
-        return DetectConfigurationSection<ApikeyConfig>(section);
+        var apikeyConfiguration = DetectConfigurationSection<ApikeyConfig>(section);
+        return apikeyConfiguration != null ? _httpClientFactory.CreateClient($"{typeof(TService).Name}Client") : null;
     }
 
     /// <summary>
