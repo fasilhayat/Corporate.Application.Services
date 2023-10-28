@@ -116,15 +116,15 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         var rootSection = _configuration.GetSection($"{typeof(TConfig).Name}");
         var client = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
 
-        var configSections = new List<Action<IConfigurationSection, HttpClient>>
+        var actionList = new List<Action<IConfigurationSection, HttpClient>>
         {
             ConfigureJwt, ConfigureApiKey
         };
         
         // Match configuration and enrich client headers accordingly.
-        foreach (var config in configSections)
+        foreach (var action in actionList)
         {
-            config.Invoke(rootSection, client);
+            action.Invoke(rootSection, client);
         }
 
         return client;
