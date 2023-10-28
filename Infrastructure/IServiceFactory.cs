@@ -21,7 +21,7 @@ namespace Corporate.Application.Services.Infrastructure
         Task<TResult?> Execute<TResult>(string querystring) where TResult : class;
 
         /// <summary>
-        /// Associated with POST
+        /// Associated with HTTP POST method.
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="json"></param>
