@@ -1,4 +1,5 @@
 ﻿using Corporate.Application.Services.Config;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -144,8 +145,11 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
             var privateKeyPayh = jwtConfiguration.PrivateKeyFilePath;
             var algorithm = jwtConfiguration.Algorithm;
 
+            var accessToken = GenerateToken();
             // Add JWT stuff to the client header here.
-            client.DefaultRequestHeaders.Add("Jwt", new List<string?>());
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
         };
     }
 
@@ -163,8 +167,8 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
             var enableEncryption = apikeyConfiguration.EnableEncryption;
 
             // Add API key stuff to the client header here.
-            client.DefaultRequestHeaders.Add("Apikey", new List<string?>());
-        };
+            client.DefaultRequestHeaders.Add("x-api-key", apikey);
+        }
     }
 
     /// <summary>
@@ -177,5 +181,16 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     {
         var name = typeof(TConfigurationSectionType).Name;
         return section!.GetSection(name).GetChildren().Any() ? section.GetSection(name) : null;
+    }
+
+    /// <summary>
+    /// /
+    /// </summary>
+    /// <returns></returns>
+    private string GenerateToken()
+    {
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+        _logger.LogInformation(token);
+        return token;
     }
 }

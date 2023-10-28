@@ -15,7 +15,7 @@ public class CountryService : ICountryService
         _logger = logger;
     }
 
-    public Country? GetCountry(string cityName)
+    public Country GetCountry(string cityName)
     {
         var parameters = $"/capital/{cityName}";
         var country = _serviceFactory.Execute<List<Country>>(parameters).Result;
