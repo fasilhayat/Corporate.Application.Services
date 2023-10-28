@@ -113,14 +113,14 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// <returns></returns>
     private HttpClient CreateHttpClient()
     {
+        var rootSection = _configuration.GetSection($"{typeof(TConfig).Name}");
+        var client = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
+
         var configSections = new List<Action<IConfigurationSection, HttpClient>>
         {
             ConfigureJwt, ConfigureApiKey
         };
         
-        var rootSection = _configuration.GetSection($"{typeof(TConfig).Name}");
-        var client = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
-
         // Match configuration and enrich client headers accordingly.
         foreach (var config in configSections)
         {
