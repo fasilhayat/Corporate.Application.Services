@@ -10,7 +10,7 @@ namespace Corporate.Application.Services.Infrastructure
         /// <typeparam name="TResult"></typeparam>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        Task<TResult?> Execute<TResult>(IEnumerable<KeyValuePair<string, string>> parameters) where TResult : class, new();
+        Task<TResult?> Execute<TResult>(IEnumerable<KeyValuePair<string, string>> parameters) where TResult : class;
 
         /// <summary>
         /// Associated with HTTP GET method.
@@ -18,7 +18,7 @@ namespace Corporate.Application.Services.Infrastructure
         /// <typeparam name="TResult"></typeparam>
         /// <param name="querystring"></param>
         /// <returns></returns>
-        Task<TResult?> Execute<TResult>(string querystring) where TResult : class, new();
+        Task<TResult?> Execute<TResult>(string querystring) where TResult : class;
 
         /// <summary>
         /// Associated with POST
@@ -26,6 +26,6 @@ namespace Corporate.Application.Services.Infrastructure
         /// <typeparam name="TResult"></typeparam>
         /// <param name="json"></param>
         /// <returns></returns>
-        Task<TResult?> Execute<TResult>(JsonObject json) where TResult : class, new();
+        Task<TResult?> Execute<TResult>(JsonObject json) where TResult : class;
     }
 }
