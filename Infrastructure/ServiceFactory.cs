@@ -197,4 +197,60 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         _logger.LogInformation(token);
         return token;
     }
+
+
+
+    #region Fra serviceHandler
+    ///// <summary>
+    ///// 
+    ///// </summary>
+    ///// <param name="endpoint"></param>
+    ///// <param name="enableEncryption"></param>
+    ///// <param name="request"></param>
+    //public async void ExecuteCall(string endpoint, string request, bool enableEncryption = false)
+    //{
+    //    var serviceUri = new Uri(endpoint);
+
+    //    using (_logger?.BeginScope("Read and handle response from service service scope"))
+    //    {
+    //        _logger?.LogInformation($"Calling service: '{typeof(TService).Name}'");
+
+    //        var handler = new HttpClientHandler(); // TODO: brug injection
+    //        handler.UseDefaultCredentials = true;
+
+    //        using (var client = new HttpClient(handler))
+    //        {
+    //            var securedRequest = GenerateSecuredRequest(request);
+    //            var content = !enableEncryption ? new StringContent(request, Encoding.UTF8, "application/json") : new StringContent(securedRequest.EncryptedBody, Encoding.UTF8, "application/json");
+
+    //            if (!enableEncryption) client.DefaultRequestHeaders.SetApiKey(_pensionsdataCacheOptions.Value.Apikey);
+    //            if (enableEncryption) client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", securedRequest.Token);
+
+    //            var responseMessage = await client.PostAsync(serviceUri, content);
+
+    //            var message = responseMessage.IsSuccessStatusCode && responseMessage.ReasonPhrase == "OK" ? "- Data successfully submitted" : "- Data not submitted";
+    //            _logger?.LogInformation($"{responseMessage.ReasonPhrase}{message} for: {typeof(TService).Name}-{endpoint}");
+    //        }
+    //    }
+    //}
+
+    ///// <summary>
+    ///// 
+    ///// </summary>
+    ///// <param name="requestBody"></param>
+    ///// <returns></returns>
+    //private (string EncryptedBody, string Token) GenerateSecuredRequest(string requestBody)
+    //{
+    //    var secret = _rsaJwtService.CreateByteArray(16);  //TODO: Flyt ned i klasse
+    //    var salt = _rsaJwtService.CreateByteArray(16);  //TODO: Flyt ned i klasse
+    //    var encryptedBodyBase64 = _symmetricCryptoService.EncryptRijn(requestBody, secret, salt);  //TODO: Flyt ned i klasse
+
+    //    var encryptedSecret = _rsaJwtService.Encrypt(secret);  //TODO: Flyt ned i klasse
+    //    var encryptedSalt = _rsaJwtService.Encrypt(salt);  //TODO: Flyt ned i klasse                
+    //    var hashBase64 = _rsaJwtService.GenerateBase64Hash(requestBody, "SHA512"); //TODO: Flyt ned i klasse
+    //    var tokenBase64 = _jwtService.ToJwtBase64(encryptedSecret, encryptedSalt, hashBase64);  //TODO: Flyt ned i klasse
+
+    //    return (encryptedBodyBase64, tokenBase64);
+    //} 
+    #endregion
 }
