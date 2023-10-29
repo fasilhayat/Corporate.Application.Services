@@ -80,6 +80,8 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     {
         var uri = new Uri($"{client.BaseAddress}{parameters}");
         _logger.LogInformation($"Calling '{uri.AbsoluteUri}'");
+        
+        // TODO: Determine to encrypt request and decrypt response
         using var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
         
         response.EnsureSuccessStatusCode();
@@ -99,6 +101,8 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     private async Task<TResult?> PostData<TResult>(HttpClient client, JsonObject json) where TResult : class
     {
         var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+        
+        // TODO: Determine to encrypt request and decrypt response
         using var response = await client.PostAsync(client.BaseAddress, content);
         
         response.EnsureSuccessStatusCode();
