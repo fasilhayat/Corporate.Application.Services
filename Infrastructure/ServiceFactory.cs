@@ -33,7 +33,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     }
 
     /// <summary>
-    /// 
+    /// HTTP GET method
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="parameters"></param>
@@ -41,36 +41,42 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     public async Task<TResult?> Execute<TResult>(IEnumerable<KeyValuePair<string, string>> parameters) where TResult : class
     {
         var querystring = $"/?{string.Join("&", parameters.Select(x => $"{x.Key}={x.Value}"))}";
+
+        // TODO: Move http creational pattern in a baseline component.
         var httpClient = CreateHttpClient();
         return await GetData<TResult>(httpClient, querystring);
     }
 
     /// <summary>
-    /// 
+    /// HTTP GET method
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="querystring"></param>
     /// <returns></returns>
     public async Task<TResult?> Execute<TResult>(string querystring) where TResult : class
     {
+        // TODO: Move http creational pattern in a baseline component.
         var httpClient = CreateHttpClient();
+        
         return await GetData<TResult>(httpClient, querystring);
     }
 
     /// <summary>
-    /// 
+    /// HTTP GET method
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="json"></param>
     /// <returns></returns>
     public async Task<TResult?> Execute<TResult>(JsonObject json) where TResult : class
     {
+        // TODO: Move http creational pattern in a baseline component.
         var httpClient = CreateHttpClient();
+
         return await PostData<TResult>(httpClient, json);
     }
 
     /// <summary>
-    /// 
+    /// HTTP GET method
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="client"></param>
@@ -92,7 +98,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     }
 
     /// <summary>
-    /// 
+    /// HTTP POST method
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="client"></param>
@@ -112,6 +118,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         return result;
     }
 
+    // TODO: Add http creation in a baseline component
     /// <summary>
     /// 
     /// </summary>
@@ -188,7 +195,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     }
 
     /// <summary>
-    /// /
+    /// TODO: Add token creation in a baseline component
     /// </summary>
     /// <returns></returns>
     private string GenerateToken()

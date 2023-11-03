@@ -11,10 +11,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var config = new ConfigurationBuilder()
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: false)
+    .Build();
+
 // Added for named httpClientFactory for books service
 builder.Services.AddHttpClient("UserServiceClient", httpClient =>
 {
-    httpClient.BaseAddress = new Uri("https://random-data-api.com/api/v2/users");
+    httpClient.BaseAddress = new Uri(config.GetSection(nameof(UserServiceConfig)).Get<UserServiceConfig>().BaseAddress!);
     httpClient.Timeout = new TimeSpan(0, 0, 30);
     httpClient.DefaultRequestHeaders.Clear();
 });
@@ -22,7 +26,7 @@ builder.Services.AddHttpClient("UserServiceClient", httpClient =>
 // Added for named httpClientFactory for country service
 builder.Services.AddHttpClient("CountryServiceClient", httpClient =>
 {
-    httpClient.BaseAddress = new Uri("https://restcountries.com/v3.1");
+    httpClient.BaseAddress = new Uri(config.GetSection(nameof(CountryServiceConfig)).Get<CountryServiceConfig>().BaseAddress!);
     httpClient.Timeout = new TimeSpan(0, 0, 30);
     httpClient.DefaultRequestHeaders.Clear();
 });
@@ -30,7 +34,7 @@ builder.Services.AddHttpClient("CountryServiceClient", httpClient =>
 // Added for named httpClientFactory for country service
 builder.Services.AddHttpClient("CreditcardServiceClient", httpClient =>
 {
-    httpClient.BaseAddress = new Uri("https://random-data-api.com/api/v2");
+    httpClient.BaseAddress = new Uri(config.GetSection(nameof(CreditcardServiceConfig)).Get<CreditcardServiceConfig>().BaseAddress!);
     httpClient.Timeout = new TimeSpan(0, 0, 30);
     httpClient.DefaultRequestHeaders.Clear();
 });
