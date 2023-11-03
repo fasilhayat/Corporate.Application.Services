@@ -143,7 +143,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     }
 
     /// <summary>
-    /// 
+    /// TODO: Add configuration detection in a baseline component
     /// </summary>
     /// <returns></returns>
     private void ConfigureJwt(IConfigurationSection? section, HttpClient client)
@@ -165,7 +165,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     }
 
     /// <summary>
-    /// 
+    ///  TODO: Add configuration detection in a baseline component
     /// </summary>
     /// <returns></returns>
     private void ConfigureApiKey(IConfigurationSection? section, HttpClient client)
@@ -183,7 +183,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     }
 
     /// <summary>
-    /// 
+    /// TODO: Add configuration detection in a baseline component
     /// </summary>
     /// <typeparam name="TConfigurationSectionType"></typeparam>
     /// <param name="section"></param>
