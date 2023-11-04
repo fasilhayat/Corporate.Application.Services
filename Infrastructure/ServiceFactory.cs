@@ -168,8 +168,8 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         if(jwtConfigurationSection != null) 
         {
             var jwtConfiguration = jwtConfigurationSection.Get<JwtConfig>();
-            var publicKeyPayh = jwtConfiguration.PublicKeyFilePath;
-            var privateKeyPayh = jwtConfiguration.PrivateKeyFilePath;
+            var publicKeyPath = jwtConfiguration.PublicKeyFilePath;
+            var privateKeyPath = jwtConfiguration.PrivateKeyFilePath;
             var algorithm = jwtConfiguration.Algorithm;
 
             var accessToken = GenerateToken();
