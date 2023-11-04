@@ -1,6 +1,7 @@
 ﻿using Corporate.Application.Services.Infrastructure;
 using Corporate.Application.Services.Model.Membership;
 using Corporate.Application.Services.Services.Interfaces;
+using System.Text.Json;
 
 namespace Corporate.Application.Services.Services;
 
@@ -24,5 +25,12 @@ public class UserService : IUserService
         };
 
         return _serviceFactory.Execute<List<User>>(parameters).Result;
+    }
+
+
+    public void AddUser(User user)
+    {
+        var jsonObj = JsonSerializer.SerializeToDocument(user);
+        _serviceFactory.Execute(jsonObj);
     }
 }

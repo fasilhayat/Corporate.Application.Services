@@ -31,4 +31,12 @@ public interface IServiceFactory<TService>
     /// <param name="json"></param>
     /// <returns></returns>
     Task<TResult?> Execute<TResult>(JsonObject json) where TResult : class;
+
+    /// <summary>
+    /// Associated with HTTP POST method.
+    /// </summary>
+    /// <typeparam name="TObject"></typeparam>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    void Execute<TObject>(TObject obj) where TObject : class;
 }

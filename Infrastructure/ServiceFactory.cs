@@ -76,6 +76,17 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TObject"></typeparam>
+    /// <param name="obj"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void Execute<TObject>(TObject obj) where TObject : class
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
     /// HTTP GET method
     /// </summary>
     /// <typeparam name="TResult"></typeparam>

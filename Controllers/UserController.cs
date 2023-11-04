@@ -27,4 +27,10 @@ public class UserController : ControllerBase
             Users = result
         };
     }
+
+    [HttpPost(Name = "AddUser")]
+    public void Add(User user)
+    {
+        _userService.AddUser(user);
+    }
 }
