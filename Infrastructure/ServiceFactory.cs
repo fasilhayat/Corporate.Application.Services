@@ -76,12 +76,11 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     }
 
     /// <summary>
-    /// 
+    /// HTTP POST method 
     /// </summary>
-    /// <typeparam name="TObject"></typeparam>
-    /// <param name="obj"></param>
+    /// <param name="jsonDocument"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public void Execute<TObject>(TObject obj) where TObject : class
+    public void Execute(JsonDocument jsonDocument)
     {
         throw new NotImplementedException();
     }
