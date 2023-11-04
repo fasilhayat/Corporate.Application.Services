@@ -1,3 +1,4 @@
+using Corporate.Application.Services.Infrastructure.Filters;
 using Corporate.Application.Services.Model.Membership;
 using Corporate.Application.Services.Services;
 using Corporate.Application.Services.Services.Interfaces;
@@ -18,6 +19,7 @@ public class UserController : ControllerBase
         _logger = logger;
     }
 
+    [TypeFilter(typeof(ControllerFilter))]
     [HttpGet(Name = "GetUsers")]
     public UserCatalog Get()
     {
@@ -28,6 +30,7 @@ public class UserController : ControllerBase
         };
     }
 
+    [TypeFilter(typeof(ControllerFilter))]
     [HttpPost(Name = "AddUser")]
     public void Add(User user)
     {
