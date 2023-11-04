@@ -31,12 +31,12 @@ public interface IServiceFactory<TService>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="json"></param>
     /// <returns></returns>
-    Task<TResult?> Execute<TResult>(JsonObject json) where TResult : class;
+    Task<TResult?> Execute<TResult>(JsonDocument jsonDocument) where TResult : class;
 
     /// <summary>
-    /// Associated with HTTP POST method.
+    /// 
     /// </summary>
-    /// <param name="jsonDocument"></param>
-    /// <returns></returns>
-    void Execute(JsonDocument jsonDocument);
+    /// <typeparam name="TObjectType"></typeparam>
+    /// <param name="data"></param>
+    void Execute<TObjectType>(TObjectType data) where TObjectType : class;
 }

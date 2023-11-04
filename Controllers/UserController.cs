@@ -31,6 +31,7 @@ public class UserController : ControllerBase
     }
 
     [TypeFilter(typeof(ControllerFilter))]
+    [TypeFilter(typeof(UserFilter))]
     [HttpPost(Name = "AddUser")]
     public void Add(User user)
     {

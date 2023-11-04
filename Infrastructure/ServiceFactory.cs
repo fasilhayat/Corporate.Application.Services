@@ -1,5 +1,7 @@
 ﻿using Corporate.Application.Services.Config;
+using Corporate.Application.Services.Model.Membership;
 using System.Net.Http.Headers;
+using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -65,23 +67,25 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// HTTP POST method
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
-    /// <param name="json"></param>
+    /// <param name="jsonDocument"></param>
     /// <returns></returns>
-    public async Task<TResult?> Execute<TResult>(JsonObject json) where TResult : class
+    public async Task<TResult?> Execute<TResult>(JsonDocument jsonDocument) where TResult : class
     {
         // TODO: Move http creational pattern in a baseline component.
         var httpClient = CreateHttpClient();
 
-        return await PostData<TResult>(httpClient, json);
+        return await PostData<TResult>(httpClient, jsonDocument);
     }
 
     /// <summary>
-    /// HTTP POST method 
+    /// 
     /// </summary>
-    /// <param name="jsonDocument"></param>
+    /// <typeparam name="TObjectType"></typeparam>
+    /// <param name="data"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public void Execute(JsonDocument jsonDocument)
+    public void Execute<TObjectType>(TObjectType data) where TObjectType : class
     {
+        var json = JsonSerializer.Serialize(data);
         throw new NotImplementedException();
     }
 
@@ -112,11 +116,13 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="client"></param>
-    /// <param name="json"></param>
+    /// <param name="jsonDocument"></param>
     /// <returns></returns>
-    private async Task<TResult?> PostData<TResult>(HttpClient client, JsonObject json) where TResult : class
+    private async Task<TResult?> PostData<TResult>(HttpClient client, JsonDocument jsonDocument) where TResult : class
     {
-        var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+        if (jsonDocument == null) throw new ArgumentNullException(nameof(jsonDocument));
+
+        var content = new StringContent(jsonDocument.ToString()!, Encoding.UTF8, "application/json");
         
         // TODO: Determine to encrypt request and decrypt response
         using var response = await client.PostAsync(client.BaseAddress, content);

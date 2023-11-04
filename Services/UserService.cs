@@ -33,7 +33,7 @@ public class UserService : IUserService
         // TODO: Map user to external format and json serialize the external data format.
         // TODO: Mappers instantiation code here
 
-        var jsonObj = JsonSerializer.SerializeToDocument(user);
-        _serviceFactory.Execute(jsonObj);
+        //var jsonObj = JsonSerializer.SerializeToDocument(user);
+        _serviceFactory.Execute<User>(user);
     }
 }
