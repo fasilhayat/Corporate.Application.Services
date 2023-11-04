@@ -62,7 +62,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     }
 
     /// <summary>
-    /// HTTP GET method
+    /// HTTP POST method
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="json"></param>
