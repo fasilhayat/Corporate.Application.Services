@@ -1,5 +1,5 @@
-using Corporate.Application.Services.Infrastructure.Filters;
 using Corporate.Application.Services.Model.Membership;
+using Corporate.Application.Services.Infrastructure.Filters;
 using Corporate.Application.Services.Services;
 using Corporate.Application.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;

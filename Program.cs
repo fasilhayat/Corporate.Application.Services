@@ -17,7 +17,7 @@ var config = new ConfigurationBuilder()
     .Build();
 
 // Added for named httpClientFactory for books service
-builder.Services.AddHttpClient("UserServiceClient", httpClient =>
+builder.Services.AddHttpClient($"{nameof(UserService)}Client", httpClient =>
 {
     httpClient.BaseAddress = new Uri(config.GetSection(nameof(UserServiceConfig)).Get<UserServiceConfig>().BaseAddress!);
     httpClient.Timeout = new TimeSpan(0, 0, 30);
@@ -25,7 +25,7 @@ builder.Services.AddHttpClient("UserServiceClient", httpClient =>
 });
 
 // Added for named httpClientFactory for country service
-builder.Services.AddHttpClient("CountryServiceClient", httpClient =>
+builder.Services.AddHttpClient($"{nameof(CountryService)}Client", httpClient =>
 {
     httpClient.BaseAddress = new Uri(config.GetSection(nameof(CountryServiceConfig)).Get<CountryServiceConfig>().BaseAddress!);
     httpClient.Timeout = new TimeSpan(0, 0, 30);
@@ -33,7 +33,7 @@ builder.Services.AddHttpClient("CountryServiceClient", httpClient =>
 });
 
 // Added for named httpClientFactory for country service
-builder.Services.AddHttpClient("CreditcardServiceClient", httpClient =>
+builder.Services.AddHttpClient($"{nameof(CreditcardService)}Client", httpClient =>
 {
     httpClient.BaseAddress = new Uri(config.GetSection(nameof(CreditcardServiceConfig)).Get<CreditcardServiceConfig>().BaseAddress!);
     httpClient.Timeout = new TimeSpan(0, 0, 30);

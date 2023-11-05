@@ -131,6 +131,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         return result;
     }
 
+    #region Baseline
     // TODO: Add http creation in a baseline component
     /// <summary>
     /// 
@@ -217,8 +218,7 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
         _logger.LogInformation(token);
         return token;
     }
-
-
+    #endregion
 
     #region Fra serviceHandler
     ///// <summary>
