@@ -52,13 +52,13 @@ builder.Services.AddHttpClient($"{nameof(CreditcardService)}Client", httpClient 
     UseDefaultCredentials = true,
 });
 
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ICountryService, CountryService>();
-builder.Services.AddScoped<ICreditcardService, CreditcardService>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ICountryService, CountryService>();
+builder.Services.AddTransient<ICreditcardService, CreditcardService>();
 
-builder.Services.AddScoped<IServiceFactory<UserService>, ServiceFactory<UserService>>();
-builder.Services.AddScoped<IServiceFactory<CountryService>, ServiceFactory<CountryService>>();
-builder.Services.AddScoped<IServiceFactory<CreditcardService>, ServiceFactory<CreditcardService>>();
+builder.Services.AddTransient<IServiceFactory<UserService>, ServiceFactory<UserService>>();
+builder.Services.AddTransient<IServiceFactory<CountryService>, ServiceFactory<CountryService>>();
+builder.Services.AddTransient<IServiceFactory<CreditcardService>, ServiceFactory<CreditcardService>>();
 
 var app = builder.Build();
 
