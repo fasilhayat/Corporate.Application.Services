@@ -99,8 +99,11 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService> where T
         
         // TODO: Determine to encrypt request and decrypt response
         using var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
-        
+
         response.EnsureSuccessStatusCode();
+        var message = response.IsSuccessStatusCode && response.ReasonPhrase == "OK" ? "- Data successfully submitted" : "- Data not submitted";
+        _logger?.LogInformation($"{response.ReasonPhrase}{message} for: {typeof(TService).Name}-{client.BaseAddress}");
+        
         var stream = await response.Content.ReadAsStreamAsync();
         var result = await JsonSerializer.DeserializeAsync<TResult>(stream, _options);
 
@@ -122,8 +125,11 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService> where T
         
         // TODO: Determine to encrypt request and decrypt response
         using var response = await client.PostAsync(client.BaseAddress, content);
-        
+
         response.EnsureSuccessStatusCode();
+        var message = response.IsSuccessStatusCode && response.ReasonPhrase == "OK" ? "- Data successfully submitted" : "- Data not submitted";
+        _logger?.LogInformation($"{response.ReasonPhrase}{message} for: {typeof(TService).Name}-{client.BaseAddress}");
+        
         var stream = await response.Content.ReadAsStreamAsync();
         var result = await JsonSerializer.DeserializeAsync<TResult>(stream, _options);
 
