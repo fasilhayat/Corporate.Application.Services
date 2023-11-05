@@ -2,6 +2,7 @@ using Corporate.Application.Services.Config;
 using Corporate.Application.Services.Infrastructure;
 using Corporate.Application.Services.Services;
 using Corporate.Application.Services.Services.Interfaces;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,10 @@ builder.Services.AddHttpClient($"{nameof(UserService)}Client", httpClient =>
     httpClient.BaseAddress = new Uri(config.GetSection(nameof(UserServiceConfig)).Get<UserServiceConfig>().BaseAddress!);
     httpClient.Timeout = new TimeSpan(0, 0, 30);
     httpClient.DefaultRequestHeaders.Clear();
+}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    UseDefaultCredentials = true,
+    Credentials = new NetworkCredential("", ""),
 });
 
 // Added for named httpClientFactory for country service
@@ -30,6 +35,10 @@ builder.Services.AddHttpClient($"{nameof(CountryService)}Client", httpClient =>
     httpClient.BaseAddress = new Uri(config.GetSection(nameof(CountryServiceConfig)).Get<CountryServiceConfig>().BaseAddress!);
     httpClient.Timeout = new TimeSpan(0, 0, 30);
     httpClient.DefaultRequestHeaders.Clear();
+}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    UseDefaultCredentials = true,
+    Credentials = new NetworkCredential("", ""),
 });
 
 // Added for named httpClientFactory for country service
@@ -38,6 +47,9 @@ builder.Services.AddHttpClient($"{nameof(CreditcardService)}Client", httpClient 
     httpClient.BaseAddress = new Uri(config.GetSection(nameof(CreditcardServiceConfig)).Get<CreditcardServiceConfig>().BaseAddress!);
     httpClient.Timeout = new TimeSpan(0, 0, 30);
     httpClient.DefaultRequestHeaders.Clear();
+}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    UseDefaultCredentials = true,
 });
 
 builder.Services.AddScoped<IUserService, UserService>();
