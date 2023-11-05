@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace Corporate.Application.Services.Infrastructure;
 
@@ -29,14 +28,14 @@ public interface IServiceFactory<TService>
     /// Associated with HTTP POST method.
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
-    /// <param name="json"></param>
+    /// <param name="jsonDocument"></param>
     /// <returns></returns>
     Task<TResult?> Execute<TResult>(JsonDocument jsonDocument) where TResult : class;
 
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="TObjectType"></typeparam>
+    /// <typeparam name="T"></typeparam>
     /// <param name="data"></param>
-    void Execute<TObjectType>(TObjectType data) where TObjectType : class;
+    void Execute<T>(T data) where T : class;
 }

@@ -53,9 +53,7 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService> where T
     /// <returns></returns>
     public async Task<TResult?> Execute<TResult>(string querystring) where TResult : class
     {
-        // TODO: Move http creational pattern in a baseline component.
         var httpClient = CreateHttpClient();
-        
         return await GetData<TResult>(httpClient, querystring);
     }
 
@@ -67,19 +65,17 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService> where T
     /// <returns></returns>
     public async Task<TResult?> Execute<TResult>(JsonDocument jsonDocument) where TResult : class
     {
-        // TODO: Move http creational pattern in a baseline component.
         var httpClient = CreateHttpClient();
-
         return await PostData<TResult>(httpClient, jsonDocument);
     }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="TObjectType"></typeparam>
+    /// <typeparam name="T"></typeparam>
     /// <param name="data"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public void Execute<TObjectType>(TObjectType data) where TObjectType : class
+    public void Execute<T>(T data) where T : class
     {
         var json = JsonSerializer.Serialize(data);
         throw new NotImplementedException();

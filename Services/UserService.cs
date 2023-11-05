@@ -34,6 +34,6 @@ public class UserService : IUserService
         // TODO: Mappers instantiation code here
 
         //var jsonObj = JsonSerializer.SerializeToDocument(user);
-        _serviceFactory.Execute<User>(user);
+        _serviceFactory.Execute(user);
     }
 }
