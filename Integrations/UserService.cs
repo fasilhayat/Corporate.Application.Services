@@ -1,9 +1,8 @@
 ﻿using Corporate.Application.Services.Infrastructure;
 using Corporate.Application.Services.Model.Membership;
 using Corporate.Application.Services.Services.Interfaces;
-using System.Text.Json;
 
-namespace Corporate.Application.Services.Services;
+namespace Corporate.Application.Services.Integrations;
 
 public class UserService : IUserService
 {

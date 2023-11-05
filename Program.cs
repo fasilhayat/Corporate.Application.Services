@@ -3,6 +3,7 @@ using Corporate.Application.Services.Infrastructure;
 using Corporate.Application.Services.Services;
 using Corporate.Application.Services.Services.Interfaces;
 using System.Net;
+using Corporate.Application.Services.Integrations;
 
 var builder = WebApplication.CreateBuilder(args);
 

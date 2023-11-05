@@ -2,7 +2,7 @@
 using Corporate.Application.Services.Model.Finance;
 using Corporate.Application.Services.Services.Interfaces;
 
-namespace Corporate.Application.Services.Services;
+namespace Corporate.Application.Services.Integrations;
 
 public class CreditcardService : ICreditcardService
 {
