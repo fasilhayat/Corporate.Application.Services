@@ -1,10 +1,7 @@
 ﻿using Corporate.Application.Services.Config;
-using Corporate.Application.Services.Model.Membership;
 using System.Net.Http.Headers;
-using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace Corporate.Application.Services.Infrastructure;
 
