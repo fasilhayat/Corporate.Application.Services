@@ -9,8 +9,7 @@ namespace Corporate.Application.Services.Infrastructure;
 /// 
 /// </summary>
 /// <typeparam name="TService"></typeparam>
-/// <typeparam name="TConfig"></typeparam>
-public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService> where TConfig : class where TService : class
+public sealed class ServiceFactory<TService> : IServiceFactory<TService> where TService : class
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<TService> _logger;
@@ -139,18 +138,17 @@ public sealed class ServiceFactory<TService, TConfig> : IServiceFactory<TService
     /// <returns></returns>
     private HttpClient CreateHttpClient()
     {
-        var rootSection = _configuration.GetSection($"{typeof(TConfig).Name}");
         var client = _httpClientFactory.CreateClient($"{typeof(TService).Name}Client");
-
-        var actionList = new List<Action<IConfigurationSection, HttpClient>>
+        var configList = new List<Action<IConfigurationSection, HttpClient>>
         {
             ConfigureJwt, ConfigureApiKey
         };
-        
-        // Match configuration and enrich client headers accordingly.
-        foreach (var action in actionList)
+
+        // Detect configuration and enrich client headers accordingly.
+        var rootSection = _configuration.GetSection($"{typeof(TService).Name}Config");
+        foreach (var config in configList)
         {
-            action.Invoke(rootSection, client);
+            config.Invoke(rootSection, client);
         }
 
         return client;
