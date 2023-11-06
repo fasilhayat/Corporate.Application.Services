@@ -132,8 +132,6 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService> where T
         return result;
     }
 
-    #region Baseline
-    // TODO: Add http creation in a baseline component
     /// <summary>
     /// 
     /// </summary>
@@ -156,8 +154,10 @@ public sealed class ServiceFactory<TService> : IServiceFactory<TService> where T
         return client;
     }
 
+    #region Baseline
+    // TODO: Add configuration detection in a baseline component
     /// <summary>
-    /// TODO: Add configuration detection in a baseline component
+    /// Detects JWT configuration in service configuration.
     /// </summary>
     /// <returns></returns>
     private void ConfigureJwt(IConfigurationSection? section, HttpClient client)
