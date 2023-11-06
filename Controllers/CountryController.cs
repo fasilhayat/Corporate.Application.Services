@@ -1,6 +1,6 @@
+using Corporate.Application.Services.Infrastructure.Filters;
 using Corporate.Application.Services.Integrations;
 using Corporate.Application.Services.Model.Geography;
-using Corporate.Application.Services.Services;
 using Corporate.Application.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +21,7 @@ public class CountryController : ControllerBase
     }
 
     [HttpGet(Name = "GeCountry")]
+    [TypeFilter(typeof(ControllerFilter))]
     public Country? Get()
     {
         var result = _countryService.GetCountry("Copenhagen");

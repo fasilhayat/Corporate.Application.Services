@@ -1,7 +1,6 @@
-using Corporate.Application.Services.Model.Membership;
 using Corporate.Application.Services.Infrastructure.Filters;
 using Corporate.Application.Services.Integrations;
-using Corporate.Application.Services.Services;
+using Corporate.Application.Services.Model.Membership;
 using Corporate.Application.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,8 +19,9 @@ public class UserController : ControllerBase
         _logger = logger;
     }
 
-    [TypeFilter(typeof(ControllerFilter))]
     [HttpGet(Name = "GetUsers")]
+    [TypeFilter(typeof(ControllerFilter))]
+    [TypeFilter(typeof(UserFilter))]
     public UserCatalog Get()
     {
         var result = _userService.GetUsers();
@@ -31,9 +31,9 @@ public class UserController : ControllerBase
         };
     }
 
+    [HttpPost(Name = "AddUser")]
     [TypeFilter(typeof(ControllerFilter))]
     [TypeFilter(typeof(UserFilter))]
-    [HttpPost(Name = "AddUser")]
     public void Add(User user)
     {
         _userService.AddUser(user);

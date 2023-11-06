@@ -1,6 +1,6 @@
+using Corporate.Application.Services.Infrastructure.Filters;
 using Corporate.Application.Services.Integrations;
 using Corporate.Application.Services.Model.Finance;
-using Corporate.Application.Services.Services;
 using Corporate.Application.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +20,7 @@ public class CreditcardController : ControllerBase
     }
 
     [HttpGet(Name = "GetCreditcard")]
+    [TypeFilter(typeof(ControllerFilter))]
     public Creditcard Get()
     {
         var result = _creditcardService.GetCreditcard();
